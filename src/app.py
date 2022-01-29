@@ -1,5 +1,4 @@
 from flask import Flask
-
 from src.data.setup import setup_schema
 
 

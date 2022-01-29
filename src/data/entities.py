@@ -58,7 +58,9 @@ class EntityBase(object):
         return self
 
 
-class Product(EntityBase):
+class Product(EntityBase, Base):
+    __tablename__ = 'products'
+    
     name = Column(String)
     type = Column(String)
     description = Column(String)
