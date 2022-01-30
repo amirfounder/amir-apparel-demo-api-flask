@@ -39,3 +39,14 @@ def get_products_from_db(query_object: dict):
     session.commit()
 
     return products
+
+
+def get_product_by_id_from_db(id: int):
+    session = build_session()
+
+    product = session.query(Product).get(id)
+
+    session.commit()
+    session.close()
+
+    return product
