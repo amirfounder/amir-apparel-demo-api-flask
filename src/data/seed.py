@@ -6,10 +6,7 @@ from src.data.setup import build_session
 def seed_data():
 
     session = build_session()
-    existing_products = session.query(Product).all()
-
-    if len(existing_products) != 0:
-        return
+    session.query(Product).delete()
 
     products: list[Product]
     products = build_products(500)
