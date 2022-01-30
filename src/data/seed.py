@@ -7,6 +7,8 @@ def seed_data():
 
     session = build_session()
     session.query(Product).delete()
+    session.commit()
+    session.close()
 
     products: list[Product]
     products = build_products(500)
