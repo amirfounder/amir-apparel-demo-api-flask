@@ -1,3 +1,2 @@
-"""
-This resources directory contains controller classes
-"""
+from src.api.app import *
+from src.api.product_controller import *

@@ -1,14 +1,17 @@
 from datetime import date, datetime
+import re
 from flask import jsonify, Response, Request
 from src.data.entities import EntityBase
-from inflector import Inflector
 
 
-def convert_to_snake_case(data: str):
-    inflector = Inflector()
-    data = inflector.underscore(data)
-    
-    return data
+def camel_to_underscore(name: str):
+    camel_pattern = re.compile(r'([A-Z])')
+    return camel_pattern.sub(lambda x: '_' + x.group(1).lower(), name)
+
+
+def underscore_to_camel(name: str):
+    under_pattern = re.compile(r'_([a-z])')
+    return under_pattern.sub(lambda x: x.group(1).upper(), name)
 
 
 def convert_request_body_to_snakecase(data: dict):
@@ -16,9 +19,9 @@ def convert_request_body_to_snakecase(data: dict):
     data = {}
 
     for key, value in data_items:
-        key_underscore = convert_to_snake_case(key)
+        key_underscore = camel_to_underscore(key)
         data[key_underscore] = value
-    
+
     return data
 
 
@@ -27,19 +30,19 @@ def responsify(res: dict | list):
 
     if isinstance(res, dict):
         responsified = responsify_dict(res)
-    
+
     elif isinstance(res, list):
         responsified = responsify_list(res)
-    
+
     else:
         message: str
         message = 'You should not be sending anything but a dict or list back from a REST API'
 
         raise TypeError(message)
-    
+
     response: Response
     response = jsonify(responsified)
-    
+
     return response
 
 
@@ -55,13 +58,16 @@ def responsify_dict(obj: dict) -> dict:
     response = {}
 
     for key, value in obj.items():
-        
+
         if isinstance(value, datetime):
             value: datetime | date
             value = value.isoformat()
         
+        if isinstance(key, str):
+            key = underscore_to_camel(key)
+
         response[key] = value
-    
+
     return response
 
 
@@ -72,7 +78,7 @@ def build_query_string(request: Request):
 
     path = request.path
     full_path = request.full_path
-    
+
     query = full_path[len(path):]
 
     return query
@@ -87,9 +93,10 @@ def build_query_object(query_string: str):
 
     if query_string_params == '':
         return obj
-    
+
     query_string_params = query_string_params.split('&')
-    query_string_param_items = [tuple(x.split('=')) for x in query_string_params]
+    query_string_param_items = [tuple(x.split('='))
+                                for x in query_string_params]
 
     for key, value in query_string_param_items:
         obj[key] = value
@@ -111,12 +118,12 @@ def filter_query_object(entity_type: type[EntityBase], query_object: dict):
     for key, value in query_object_items:
 
         key = key.lower()
-        
+
         try:
             value = int(value)
         except ValueError:
             pass
-        
+
         if key in column_names:
             filtered_obj[key] = value
 
