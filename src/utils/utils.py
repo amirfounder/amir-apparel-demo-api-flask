@@ -121,16 +121,26 @@ def filter_query_object(entity_type: type[EntityBase], query_object: dict):
     query_object_items = query_object.items()
     query_object_items = list(query_object_items)
 
-    for key, value in query_object_items:
+    for key, values in query_object_items:
 
         key = key.lower()
 
-        try:
-            value = int(value)
-        except ValueError:
-            pass
+        values: list[str]
+
+        for index, value in enumerate(values):
+            
+            if value.isnumeric():
+                value = int(value)
+            
+            if isinstance(value, str) and value.lower() == 'true':
+                value = True
+
+            if isinstance(value, str) and value.lower() == 'false':
+                value = False
+
+            values[index] = value
 
         if key in column_names:
-            filtered_obj[key] = value
+            filtered_obj[key] = values
 
     return filtered_obj
