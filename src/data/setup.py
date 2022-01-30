@@ -26,8 +26,6 @@ def build_session() -> TSession:
 
 def reset_schema():
     mapper_registry.metadata.drop_all(bind=engine)
-    # session = build_session()
-    # session.execute('DROP SCHEMA public CASCADE; CREATE SCHEMA public;')
     setup_schema()
 
 
