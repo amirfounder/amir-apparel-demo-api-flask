@@ -1,6 +1,5 @@
 from operator import or_
 from sqlalchemy import func
-from sqlalchemy.dialects import postgresql
 from src.data.entities import Product
 from src.data.setup import build_session
 
