@@ -1,14 +1,11 @@
 from src.data.entities import Product
 from src.data.factory import build_products
-from src.data.setup import build_session
+from src.data.setup import build_session, reset_schema
 
 
 def seed_data():
 
-    session = build_session()
-    session.query(Product).delete()
-    session.commit()
-    session.close()
+    reset_schema()
 
     products: list[Product]
     products = build_products(500)
