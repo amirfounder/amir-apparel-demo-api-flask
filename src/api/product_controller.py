@@ -1,7 +1,7 @@
 from flask import request
 from src.api.app import app
 from src.data.entities import Product
-from src.services.product_service import get_products as get_products_service
+from src.services.product_service import *
 from src.utils.utils import build_query_object, build_query_string, clean_query_object, responsify
 
 
@@ -17,6 +17,16 @@ def get_products():
     products = get_products_service(query_object)
 
     response = responsify(products)
+    response.status = 200
+
+    return response
+
+@app.route('/products/<id>', methods=['GET'])
+def get_product_by_id(id: int):
+    product: dict
+    product = get_product_by_id_service(id)
+
+    response = responsify(product)
     response.status = 200
 
     return response

@@ -24,6 +24,11 @@ def build_session() -> TSession:
     return session
 
 
+def reset_schema():
+    mapper_registry.metadata.drop_all(bind=engine)
+    setup_schema()
+
+
 def setup_schema():
     mapper_registry.metadata.create_all(engine)
     sync_tables()
