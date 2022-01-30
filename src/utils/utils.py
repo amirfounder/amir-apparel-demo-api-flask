@@ -85,7 +85,7 @@ def build_query_string(request: Request):
 
 
 def build_query_object(query_string: str):
-    obj: dict
+    obj: dict[str, list]
     obj = {}
 
     query_string_params: str
@@ -99,32 +99,43 @@ def build_query_object(query_string: str):
                                 for x in query_string_params]
 
     for key, value in query_string_param_items:
-        obj[key] = value
+        values = value.split(',')
+        
+        if key in obj:
+            obj[key].extend(values)
+        
+        else:
+            obj[key] = values
 
     return obj
 
 
-def filter_query_object(entity_type: type[EntityBase], query_object: dict):
+def clean_query_object(accepted_filter_keys: list[str], query_object: dict):
     filtered_obj: dict
     filtered_obj = {}
 
-    column_names: list[str]
-    column_names = entity_type.get_column_names()
-    column_names = [x.lower() for x in column_names]
+    accepted_filter_keys = [x.lower() for x in accepted_filter_keys]
 
     query_object_items = query_object.items()
     query_object_items = list(query_object_items)
 
-    for key, value in query_object_items:
+    values: list[str]
+    for key, values in query_object_items:
 
         key = key.lower()
 
-        try:
-            value = int(value)
-        except ValueError:
-            pass
+        for index, value in enumerate(values):
+            
+            if value.isnumeric():
+                value = int(value)
+            if isinstance(value, str) and value.lower() == 'true':
+                value = True
+            if isinstance(value, str) and value.lower() == 'false':
+                value = False
 
-        if key in column_names:
-            filtered_obj[key] = value
+            values[index] = value
+
+        if key in accepted_filter_keys:
+            filtered_obj[key] = values
 
     return filtered_obj
