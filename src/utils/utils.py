@@ -85,7 +85,7 @@ def build_query_string(request: Request):
 
 
 def build_query_object(query_string: str):
-    obj: dict
+    obj: dict[str, list]
     obj = {}
 
     query_string_params: str
@@ -99,7 +99,13 @@ def build_query_object(query_string: str):
                                 for x in query_string_params]
 
     for key, value in query_string_param_items:
-        obj[key] = value
+        values = value.split(',')
+        
+        if key in obj:
+            obj[key].extend(values)
+        
+        else:
+            obj[key] = values
 
     return obj
 
