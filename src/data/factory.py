@@ -33,7 +33,6 @@ def build_product():
     product.status = build_random_status()
     product.launch_date = build_random_launch_date()
 
-
     return product
 
 
@@ -58,7 +57,10 @@ def build_random_price():
     max = 100
     random_double = random()
 
-    return min + (random_double * (max - min))
+    random_price = min + (random_double * (max - min))
+    random_price = round(random_price, 2)
+
+    return random_price
 
 
 def build_random_quantity():
@@ -68,11 +70,14 @@ def build_random_quantity():
 def build_random_status():
     return randint(0, 1) == 1
 
+
 def build_random_demographic():
     return choice(DEMOGRAPHICS)
 
+
 def build_random_hex_code():
     return choice(HEX_CODES)
+
 
 def build_color(hex_code: str):
     if hex_code == 'b0160b':
@@ -88,6 +93,7 @@ def build_color(hex_code: str):
         return 'Blue'
 
     return 'Unknown'
+
 
 def build_random_launch_date():
     start = datetime(1995, 1, 1)

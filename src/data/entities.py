@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, BigInteger, DateTime, Table, ForeignKey, Numeric, Boolean
+from sqlalchemy import Column, Float, Integer, String, BigInteger, DateTime, Table, ForeignKey, Numeric, Boolean
 from src.data.setup import Base
 
 
@@ -65,7 +65,7 @@ class Product(EntityBase, Base):
     type = Column(String)
     description = Column(String)
     material = Column(String)
-    price = Column(Numeric)
+    price = Column(Numeric(scale=2))
     available_quantity = Column(Integer)
     status = Column(Boolean)
     demographic = Column(String)
@@ -157,3 +157,12 @@ class Purchase(EntityBase, Base):
                 'cvv': self.credit_card_cvv
             }
         }
+
+
+class LineItem(EntityBase, Base):
+    __tablename__ = 'line_items'
+
+    product_id = Column(ForeignKey(Product.id))
+    purchase_id = Column(ForeignKey(Purchase.id))
+    quantity = Column(Integer)
+    total_cost = Column(Numeric(scale=2))

@@ -1,5 +1,7 @@
 from datetime import date, datetime
+from decimal import Decimal
 import re
+from unicodedata import decimal
 from flask import jsonify, Response, Request
 from src.data.entities import EntityBase
 
@@ -59,9 +61,13 @@ def responsify_dict(obj: dict) -> dict:
 
     for key, value in obj.items():
 
-        if isinstance(value, datetime):
+        if isinstance(value, (datetime, date)):
             value: datetime | date
             value = value.isoformat()
+        
+        if isinstance(value, Decimal):
+            value: Decimal
+            value = float(value)
         
         if isinstance(key, str):
             key = underscore_to_camel(key)
