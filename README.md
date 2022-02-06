@@ -24,9 +24,8 @@ This project was finished early due to the lack of learning.
 My motivation for this project was to write an API in python for the Amir Apparel Demo project suite.
 This project includes basic features such as pagination and filtering. Included frameworks / libraries:
 
-- ASP.NET
-- Entity Framework
-- AutoMapper
+- SQL Alchemy
+- Flask
 
 ## Challenges
 
