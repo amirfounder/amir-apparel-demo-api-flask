@@ -1,4 +1,4 @@
-# Amir Apparel Demo API Flask (.NET)
+# Amir Apparel Demo API Flask
 
 This project is the API of the client-server architecture Amir Apparel Demo. You can find the rest of the repositories on this page: https://github.com/amirfounder.
 This project was finished early due to the lack of learning.
